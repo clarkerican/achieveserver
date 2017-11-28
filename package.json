@@ -1,0 +1,22 @@
+{
+  "name": "achieveserver",
+  "version": "0.0.0",
+  "description": "Final project for CPR E 388. A social media app where users can share goals and motivate each other to accomplish those goals!",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "mocha"
+  },
+  "repository": {},
+  "authors": [
+    "Erica and Will"
+  ],
+  "license": "MIT",
+  "bin": {},
+  "dependencies": {
+    "express": "4.16.0"
+  },
+  "devDependencies": {
+    "mocha": "3.5.3"
+  }
+}
