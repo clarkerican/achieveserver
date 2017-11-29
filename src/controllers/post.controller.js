@@ -13,9 +13,10 @@ export async function likePost(req, res, next) {
 
 export async function createPost(req, res, next) {
   const post = req.body.post;
-  postService.createPost(post)
-    .then((post) => {
-      res.json(post);
+  const authorId = req.body.author;
+  postService.createPost(post, authorId)
+    .then((newPost) => {
+      res.json(newPost);
     })
     .catch((err) => {
       res.json({ success: false, err });
@@ -26,7 +27,12 @@ export async function getUsersFeed(req, res, next) {
   const userId = req.params.userid;
   friendshipService.getUsersFriends(userId)
     .then((friends) => {
-      postService.getPostsByAuthors(friends)
+      const ids = [ userId ];
+      friends.forEach((friend) => {
+        ids.push(friend.id2Id);
+      });
+
+      postService.getPostsByAuthors(ids)
         .then((posts) => {
           res.json(posts);
         })
@@ -43,7 +49,13 @@ export async function getPost(req, res, next) {
   const postId = req.params.postid;
   postService.getPostById(postId)
     .then((post) => {
-      res.json(post);
+      postService.getCommentsByPost(postId)
+        .then((comments) => {
+          res.json({ post, comments });
+        })
+        .catch((err) => {
+          res.json({ success: false, err });
+        });
     })
     .catch((err) => {
       res.json({ success: false, err });
@@ -64,7 +76,8 @@ export async function getPostsComments(req, res, next) {
 export async function createComment(req, res, next) {
   const postId = req.params.postid;
   const comment = req.body.comment;
-  postService.createComment(comment, postId)
+  const author = req.body.author;
+  postService.createComment(comment, postId, author)
     .then((comment) => {
       res.json(comment);
     })

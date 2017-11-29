@@ -1,17 +1,20 @@
+import sequelize from 'sequelize';
+
+const OR = sequelize.Op.or;
+
 export default class UserService {
-  constructor(userRepository, log){
+  constructor(userRepository){
     this.userRepository = userRepository;
-    this.log = log;
   }
 
   async createUser(user) {
-    this.log(`UserService: Creating User ${user}`);
-    const user = await this.userRepository.create(user);
-    return user;
+    console.log(`UserService: Creating User ${user}`);
+    const newUser = await this.userRepository.create(user);
+    return newUser;
   }
 
   async getUserByUsername(username) {
-    this.log(`UserService: Retrieving User ${username}`);
+    console.log(`UserService: Retrieving User ${username}`);
     const user = await this.userRepository.findOne({
       where: {
         username
@@ -20,8 +23,20 @@ export default class UserService {
     return user;
   }
 
+  async findUsersById(userIds) {
+    console.log(`UserService: Retrieving all users with the given ids ${userIds}`);
+    const users = await this.userRepository.findAll({
+      where: {
+        id: {
+          [OR]: userIds
+        }
+      }
+    });
+    return users;
+  }
+
   async getUserById(userId){
-    this.log(`UserService: Retrieving User ${userId}`);
+    console.log(`UserService: Retrieving User ${userId}`);
     const user = await this.userRepository.findOne({
       where: {
         id: userId
@@ -31,7 +46,7 @@ export default class UserService {
   }
 
   async getUsernameFromId(userId){
-    this.log(`UserService: Retrieving User ${username}`);
+    console.log(`UserService: Retrieving User ${username}`);
     const user = await this.userRepository.findOne({
       where: {
         id: userId

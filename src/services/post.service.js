@@ -3,27 +3,28 @@ import sequelize from 'sequelize';
 const OR = sequelize.Op.or;
 
 export default class PostService {
-  constructor(postRepository, commentRepository, log){
+  constructor(postRepository, commentRepository){
     this.postRepository = postRepository;
     this.commentRepository = commentRepository;
-    this.log = log;
   }
 
-  async createPost(post) {
-    this.log(`PostService: Creating post ${post}`);
+  async createPost(post, authorId) {
+    console.log(`PostService: Creating post ${post}`);
     const newPost = await this.postRepository.create(post);
+    newPost.setAuthor(authorId);
     return newPost;
   }
 
-  async createComment(postId, comment) {
-    this.log(`PostService: Creating a comment ${comment} for post ${postId}`);
+  async createComment(comment, postId, authorId) {
+    console.log(`PostService: Creating a comment ${comment} for post ${postId} and author ${authorId}`);
     const newComment = await this.commentRepository.create(comment);
-    newComment.setPost(postId); // This may or may not work revisit and test
+    newComment.setPostid(postId); // This may or may not work revisit and test
+    newComment.setAuthor(authorId);
     return newComment;
   }
 
   async getPostById(postId) {
-    this.log(`PostService: Retrieving post ${postId}`);
+    console.log(`PostService: Retrieving post ${postId}`);
     const post = await this.postRepository.findOne({
       where: {
         id: postId
@@ -34,49 +35,55 @@ export default class PostService {
   }
 
   async getPostsByAuthor(authorId) {
-    this.log(`PostService: Retrieving posts by author ${authorId}`);
+    console.log(`PostService: Retrieving posts by author ${authorId}`);
     const posts = await this.postRepository.findAll({
       where: {
-        author: authorId
+        authorId: authorId
       }
     });
     return posts;
   }
 
   async getPostsByAuthors(authors) {
-    this.log(`PostService: Retrieving posts by authors ${authors}`);
+    console.log(`PostService: Retrieving posts by authors ${authors}`);
 
     const posts = await this.postRepository.findAll({
+      order: [
+        ['createdAt', 'DESC']
+      ],
       where: {
+        authorId: {
           [OR]: authors
         }
+      }
     });
     return posts;
   }
 
   async getCommentsByPost(postId){
-    this.log(`PostService: Retrieve comments by post ${postId}`);
+    console.log(`PostService: Retrieve comments by post ${postId}`);
 
     const comments = await this.commentRepository.findAll({
       where: {
-        postid: postId
+        postidId: postId
       }
     });
     return comments;
   }
 
   async likePost(postId) {
-    this.log(`Post Service: Liking post ${postId}`);
+    console.log(`Post Service: Liking post ${postId}`);
 
-    const post = await this.postRepository.findAll({
+    const post = await this.postRepository.findOne({
       where: {
           id: postId
         }
     });
 
     if(post) {
+      const postLikes = post.likes;
       await post.updateAttributes({
-        likes: post.likes + 1
+        likes: postLikes + 1
       });
       return true;
     }

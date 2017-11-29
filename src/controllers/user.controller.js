@@ -15,9 +15,20 @@ export async function getUser(req, res, next) {
 }
 
 export async function getFriends(req, res, next) {
-  userService.getUsersFriends(req.params.userId)
+  friendshipService.getUsersFriends(req.params.userId)
     .then((friends) =>{
-      res.json(friends);
+      const ids = [];
+      friends.forEach((friend) => {
+        ids.push(friend.id2Id);
+      });
+
+      userService.findUsersById(ids)
+        .then((friendsObjects) => {
+          res.json(friendsObjects);
+        })
+        .catch((err) => {
+          res.json({ success: false, err });
+        });
     })
     .catch((err) => {
       res.json({ success: false, err });

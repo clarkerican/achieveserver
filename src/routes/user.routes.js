@@ -2,18 +2,44 @@ const express = require('express');
 
 import * as userController from './../controllers/user.controller';
 
-const router = express.Router();
-
 // Routes go here
 
-module.exports = router;
+export const router = express.Router();
 
-router.get('/friends/userId', userController.getFriends);
+/**
+ * GET friends of user with userId
+ */
+router.get('/friends/:userId', userController.getFriends);
 
+
+/**
+ * POST new friendship
+ *
+ * Order of the ids does not matter
+ * Ex:
+ * {
+ *  "id1": 1,
+ *  "id2": 2
+ * }
+ */
 router.post('/friends', userController.addFriends);
 
+/**
+ * GET user by username
+ */
 router.get('/:username', userController.getUser);
 
+/**
+ * POST a new user
+ *
+ * Ex:
+ * "user": {
+ *  "username": "enc",
+ *  "email": "email@gmail.com",
+ *  "firstName": "Eric",
+ *  "lastName": "Clark"
+ * }
+ */
 router.post('/', userController.createUser);
 
 export function setDependencies(userService, friendshipService) {

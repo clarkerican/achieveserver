@@ -1,29 +1,33 @@
 export default class Friendship {
-  constructor(friendshipRepository, log){
+  constructor(friendshipRepository){
     this.friendshipRepository = friendshipRepository;
-    this.log = log;
   }
 
   async getUsersFriends(userid) {
-    this.log(`FriendshipService: Retrieving friends of user ${username}`);
+    console.log(`FriendshipService: Retrieving friends of user ${userid}`);
     const friends = await this.friendshipRepository.findAll({
+      attributes: ['id2Id'],
       where: {
-        id1: userid
+        id1Id: userid
       }
     });
-    return friends;
+    if(friends && friends.length > 0) {
+      return friends;
+    } else {
+      return [];
+    }
   }
 
   async addFriends(id1, id2) {
-    this.log(`FriendshipService: Adding ${id1} and ${id2} as friends`);
+    console.log(`FriendshipService: Adding ${id1} and ${id2} as friends`);
     const friendship1 = await this.friendshipRepository.create({
-        id1,
-        id2
+        id1Id: id1,
+        id2Id: id2
       }
     );
     const friendship2 = await this.friendshipRepository.create({
-      id1: id2,
-      id2: id1
+      id1Id: id2,
+      id2Id: id1
     });
 
     return friendship1 && friendship2;
