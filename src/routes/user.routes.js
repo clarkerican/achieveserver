@@ -1,14 +1,21 @@
 const express = require('express');
+
+import * as userController from './../controllers/user.controller';
+
 const router = express.Router();
 
 // Routes go here
 
 module.exports = router;
 
-router.post('/:username', (req, res)=> {res.sendStatus(200);});
+router.get('/friends/userId', userController.getFriends);
 
-router.get('/:username', (req, res)=> {res.sendStatus(200);});
+router.post('/friends', userController.addFriends);
 
-router.get('/:username/friends', (req, res)=> {res.sendStatus(200);});
+router.get('/:username', userController.getUser);
 
-router.post('/:username/friends', (req, res)=> {res.sendStatus(200);});
+router.post('/', userController.createUser);
+
+export function setDependencies(userService, friendshipService) {
+  userController.setDependencies(userService, friendshipService);
+}
