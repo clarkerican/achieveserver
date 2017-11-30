@@ -34,7 +34,7 @@ export async function getUsersFeed(req, res, next) {
 
       postService.getPostsByAuthors(ids)
         .then((posts) => {
-          res.json(posts);
+          res.json({ posts });
         })
         .catch((err) => {
           res.json({ success: false, err });

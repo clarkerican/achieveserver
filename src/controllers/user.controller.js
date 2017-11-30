@@ -24,7 +24,7 @@ export async function getFriends(req, res, next) {
 
       userService.findUsersById(ids)
         .then((friendsObjects) => {
-          res.json(friendsObjects);
+          res.json({ friends: friendsObjects });
         })
         .catch((err) => {
           res.json({ success: false, err });
