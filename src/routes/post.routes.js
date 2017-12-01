@@ -4,6 +4,10 @@ import * as postController from './../controllers/post.controller'
 
 export const router = express.Router();
 
+/**
+ * GET posts by author
+ */
+router.get('/user/:userId', postController.getPostsByAuthor);
 
 /**
  *  POST a new post
@@ -65,6 +69,6 @@ router.post('/like/:postid', postController.likePost);
  */
 router.get('/:postid', postController.getPost);
 
-export function setDependencies(newPostService, newFriendshipService) {
-  postController.setDependencies(newPostService, newFriendshipService);
+export function setDependencies(newPostService, newFriendshipService, newUserService) {
+  postController.setDependencies(newPostService, newFriendshipService, newUserService);
 }

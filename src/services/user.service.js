@@ -46,13 +46,33 @@ export default class UserService {
   }
 
   async getUsernameFromId(userId){
-    console.log(`UserService: Retrieving User ${username}`);
+    console.log(`UserService: Retrieving User ${userId}`);
     const user = await this.userRepository.findOne({
       where: {
         id: userId
       }
     });
     return user.username;
+  }
+
+  async getNameFromId(userId){
+    console.log(`UserService: Retrieving User's name for ${userId}`);
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId
+      }
+    });
+    return `${user.firstName} ${user.lastName}`;
+  }
+
+  async getIdFromUsername(username){
+    console.log(`UserService: Retrieving User ${username}`);
+    const user = await this.userRepository.findOne({
+      where: {
+        username: username
+      }
+    });
+    return user.id;
   }
 
 

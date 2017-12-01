@@ -30,7 +30,7 @@ const userService = new UserService(sequelize.User);
 const postService = new PostService(sequelize.Post, sequelize.Comment);
 const friendshipService = new FriendshipService(sequelize.Friendship);
 user.setDependencies(userService, friendshipService);
-post.setDependencies(postService, friendshipService);
+post.setDependencies(postService, friendshipService, userService);
 
 app.use((req, res) => {
   res.status(404).send({

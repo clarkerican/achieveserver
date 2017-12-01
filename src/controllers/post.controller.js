@@ -1,4 +1,5 @@
 let friendshipService = {};
+let userService = {};
 let postService = {};
 
 export async function likePost(req, res, next) {
@@ -17,6 +18,17 @@ export async function createPost(req, res, next) {
   postService.createPost(post, authorId)
     .then((newPost) => {
       res.json(newPost);
+    })
+    .catch((err) => {
+      res.json({ success: false, err });
+    });
+}
+
+export async function getPostsByAuthor(req, res, next) {
+  const userid = req.params.userId;
+  postService.getPostsByAuthors([ userid ])
+    .then((posts) => {
+      res.json({ posts });
     })
     .catch((err) => {
       res.json({ success: false, err });
@@ -88,7 +100,8 @@ export async function createComment(req, res, next) {
 
 
 
-export function setDependencies(newPostService, newFriendshipService){
+export function setDependencies(newPostService, newFriendshipService, newUserService){
   friendshipService = newFriendshipService;
+  userService = newUserService;
   postService = newPostService;
 }

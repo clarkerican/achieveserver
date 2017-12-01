@@ -19,15 +19,22 @@ router.get('/friends/:userId', userController.getFriends);
  * Ex:
  * {
  *  "id1": 1,
- *  "id2": 2
+ *  "username": "enclark" // TODO
  * }
  */
 router.post('/friends', userController.addFriends);
 
 /**
- * GET user by username
+ * Post user or get user if it already exists
  */
-router.get('/:username', userController.getUser);
+router.post('/login', userController.getUserByUsername);
+
+/**
+ * GET user by userId
+ */
+router.get('/:userId', userController.getUser);
+
+
 
 /**
  * POST a new user

@@ -30,6 +30,7 @@ Post.belongsTo(User, { as: 'author', through: 'id' });
 
 const Comment = model.define('comment', {
   content: STRING,
+  authorName: STRING,
   likes: { type: INTEGER, defaultValue: 0}
 });
 
