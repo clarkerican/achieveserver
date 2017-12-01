@@ -5,17 +5,20 @@ export default class Friendship {
 
   async getUsersFriends(userid) {
     console.log(`FriendshipService: Retrieving friends of user ${userid}`);
-    const friends = await this.friendshipRepository.findAll({
-      attributes: ['id2Id'],
-      where: {
-        id1Id: userid
+    if(userid.length > 0) {
+      const friends = await this.friendshipRepository.findAll({
+        attributes: ['id2Id'],
+        where: {
+          id1Id: userid
+        }
+      });
+      if (friends && friends.length > 0) {
+        return friends;
+      } else {
+        return [];
       }
-    });
-    if(friends && friends.length > 0) {
-      return friends;
-    } else {
-      return [];
     }
+    return [];
   }
 
   async addFriends(id1, id2) {
